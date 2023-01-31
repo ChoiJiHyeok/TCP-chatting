@@ -23,10 +23,12 @@ DROP TABLE IF EXISTS `chat_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chat_list` (
+  `연번` int NOT NULL AUTO_INCREMENT,
   `채팅방이름` varchar(45) DEFAULT NULL,
   `개설자` varchar(45) DEFAULT NULL,
-  `참여인원` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `참여인원` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`연번`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -35,18 +37,18 @@ CREATE TABLE `chat_list` (
 
 LOCK TABLES `chat_list` WRITE;
 /*!40000 ALTER TABLE `chat_list` DISABLE KEYS */;
-INSERT INTO `chat_list` VALUES ('chat_room_1','dsadas','1'),('chat_room_2','dsadas','1'),('chat_room_3','dsadas','1');
+INSERT INTO `chat_list` VALUES (1,'chat_room_1','dsadas','8'),(2,'chat_room_2','dsadas','3'),(3,'chat_room_3','dsadas','0'),(4,'chat_room_asdasd','asdasd','0'),(5,'chat_room_asdasdasd','asdsad','0');
 /*!40000 ALTER TABLE `chat_list` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `chat_room_1`
+-- Table structure for table `chat_room_asdasd`
 --
 
-DROP TABLE IF EXISTS `chat_room_1`;
+DROP TABLE IF EXISTS `chat_room_asdasd`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_1` (
+CREATE TABLE `chat_room_asdasd` (
   `날짜` varchar(45) DEFAULT NULL,
   `시간` varchar(45) DEFAULT NULL,
   `송신자` varchar(45) DEFAULT NULL,
@@ -56,22 +58,22 @@ CREATE TABLE `chat_room_1` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `chat_room_1`
+-- Dumping data for table `chat_room_asdasd`
 --
 
-LOCK TABLES `chat_room_1` WRITE;
-/*!40000 ALTER TABLE `chat_room_1` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_1` ENABLE KEYS */;
+LOCK TABLES `chat_room_asdasd` WRITE;
+/*!40000 ALTER TABLE `chat_room_asdasd` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chat_room_asdasd` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `chat_room_12312`
+-- Table structure for table `chat_room_asdasdasd`
 --
 
-DROP TABLE IF EXISTS `chat_room_12312`;
+DROP TABLE IF EXISTS `chat_room_asdasdasd`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_12312` (
+CREATE TABLE `chat_room_asdasdasd` (
   `날짜` varchar(45) DEFAULT NULL,
   `시간` varchar(45) DEFAULT NULL,
   `송신자` varchar(45) DEFAULT NULL,
@@ -81,112 +83,12 @@ CREATE TABLE `chat_room_12312` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `chat_room_12312`
+-- Dumping data for table `chat_room_asdasdasd`
 --
 
-LOCK TABLES `chat_room_12312` WRITE;
-/*!40000 ALTER TABLE `chat_room_12312` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_12312` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chat_room_2`
---
-
-DROP TABLE IF EXISTS `chat_room_2`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_2` (
-  `날짜` varchar(45) DEFAULT NULL,
-  `시간` varchar(45) DEFAULT NULL,
-  `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(45) DEFAULT NULL,
-  `내용` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chat_room_2`
---
-
-LOCK TABLES `chat_room_2` WRITE;
-/*!40000 ALTER TABLE `chat_room_2` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_2` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chat_room_3`
---
-
-DROP TABLE IF EXISTS `chat_room_3`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_3` (
-  `날짜` varchar(45) DEFAULT NULL,
-  `시간` varchar(45) DEFAULT NULL,
-  `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(45) DEFAULT NULL,
-  `내용` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chat_room_3`
---
-
-LOCK TABLES `chat_room_3` WRITE;
-/*!40000 ALTER TABLE `chat_room_3` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_3` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chat_room_asddas`
---
-
-DROP TABLE IF EXISTS `chat_room_asddas`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_asddas` (
-  `날짜` varchar(45) DEFAULT NULL,
-  `시간` varchar(45) DEFAULT NULL,
-  `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(45) DEFAULT NULL,
-  `내용` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chat_room_asddas`
---
-
-LOCK TABLES `chat_room_asddas` WRITE;
-/*!40000 ALTER TABLE `chat_room_asddas` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_asddas` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `chat_room_dsadsaads`
---
-
-DROP TABLE IF EXISTS `chat_room_dsadsaads`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_dsadsaads` (
-  `날짜` varchar(45) DEFAULT NULL,
-  `시간` varchar(45) DEFAULT NULL,
-  `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(45) DEFAULT NULL,
-  `내용` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chat_room_dsadsaads`
---
-
-LOCK TABLES `chat_room_dsadsaads` WRITE;
-/*!40000 ALTER TABLE `chat_room_dsadsaads` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_dsadsaads` ENABLE KEYS */;
+LOCK TABLES `chat_room_asdasdasd` WRITE;
+/*!40000 ALTER TABLE `chat_room_asdasdasd` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chat_room_asdasdasd` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -200,9 +102,10 @@ CREATE TABLE `net_chat` (
   `날짜` varchar(45) DEFAULT NULL,
   `시간` varchar(45) DEFAULT NULL,
   `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(100) DEFAULT NULL,
   `내용` varchar(100) DEFAULT NULL,
-  `채팅방` varchar(45) DEFAULT NULL
+  `채팅방` varchar(45) DEFAULT NULL,
+  `채팅방연번` int DEFAULT NULL,
+  `알림` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -212,6 +115,7 @@ CREATE TABLE `net_chat` (
 
 LOCK TABLES `net_chat` WRITE;
 /*!40000 ALTER TABLE `net_chat` DISABLE KEYS */;
+INSERT INTO `net_chat` VALUES ('23-01-31','17:03','dasdsa','123213','2',2,NULL),('23-01-31','17:03','123123.','123213','2',2,NULL),('23-01-31','17:03','dasdsa','님이 채팅방을 나가셨습니다.','2',2,'퇴장'),('23-01-31','17:03','123123.','님이 채팅방을 나가셨습니다.','2',2,'퇴장');
 /*!40000 ALTER TABLE `net_chat` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -233,7 +137,7 @@ CREATE TABLE `online_user` (
 
 LOCK TABLES `online_user` WRITE;
 /*!40000 ALTER TABLE `online_user` DISABLE KEYS */;
-INSERT INTO `online_user` VALUES ('asdsaddsa');
+INSERT INTO `online_user` VALUES ('sadasd');
 /*!40000 ALTER TABLE `online_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -246,4 +150,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-30 21:09:01
+-- Dump completed on 2023-01-31 19:29:59
