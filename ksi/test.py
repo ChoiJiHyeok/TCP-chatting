@@ -13,8 +13,8 @@ class ChatClient(QWidget, form_class):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        self.move(100,100)
-        # self.move(600, 100)
+        # self.move(100,100)
+        self.move(600, 100)
         self.stackedWidget.setCurrentIndex(0)
         self.sw_open_chat.setCurrentIndex(0)
         self.btn_send_message.clicked.connect(self.send_chat)
@@ -90,7 +90,7 @@ class ChatClient(QWidget, form_class):
     def add_chat_room(self):
         chat_name = self.le_chat_room.text()
         self.le_chat_room.clear()
-        # QMessageBox.information(self,'채팅방', '생성완료',QMessageBox.Ok)
+        QMessageBox.information(self,'채팅방', '생성완료',QMessageBox.Ok)
         open_chat_message = (f"{self.login_user_id}/!@|CHATING ROOM OPEN|@!/chat_room_{chat_name}").encode()
         self.client_socket.send(open_chat_message)
     def chat_room_update(self,chat_list):
@@ -147,6 +147,7 @@ class listen_Qthread(QThread):
                 break
             buf = buf.decode('utf-8')
             if '@!|USER UPDATE|!@' in buf:
+                print('asdkasdjklasdjklasjdklsjalkdjsakldjsakljdklsajkdljsalkdjskladjklsakjd')
                 temp = buf.split('/')[1]
                 temp2= buf.split('/')[2]
                 online_user_list= json.loads(temp)
@@ -159,8 +160,8 @@ class listen_Qthread(QThread):
                 temp2 = buf.split('/!/!/!')[3]
                 chat_data = json.loads(temp)
                 chat_list = json.loads(temp2)
-                self.parent.chat_data_update(chat_data)
                 self.parent.chat_room_update(chat_list)
+                self.parent.chat_data_update(chat_data)
                 continue
             elif '!@|CHATING ROOM UPDATE|@!' in buf:
                 a = buf.split('/')[1]

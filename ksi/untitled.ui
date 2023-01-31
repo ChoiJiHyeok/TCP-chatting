@@ -100,7 +100,7 @@
       <string>채팅창</string>
      </property>
     </widget>
-    <widget class="QPushButton" name="pushButton">
+    <widget class="QPushButton" name="btn_back_input">
      <property name="geometry">
       <rect>
        <x>30</x>
@@ -206,7 +206,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>채팅방 개설</string>
+      <string>채팅방 생성</string>
      </property>
     </widget>
    </widget>
@@ -224,7 +224,7 @@
       <string>전송</string>
      </property>
     </widget>
-    <widget class="QLabel" name="lb_receiver">
+    <widget class="QLabel" name="lb_chat_name">
      <property name="geometry">
       <rect>
        <x>40</x>
@@ -234,7 +234,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>데이터 AI SW 개발자 양성</string>
+      <string>!@#%#@%!@%$#^!$#^!#$^$^#</string>
      </property>
     </widget>
     <widget class="QListWidget" name="lw_message">
