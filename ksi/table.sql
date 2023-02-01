@@ -23,12 +23,10 @@ DROP TABLE IF EXISTS `chat_list`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `chat_list` (
-  `연번` int NOT NULL AUTO_INCREMENT,
   `채팅방이름` varchar(45) DEFAULT NULL,
   `개설자` varchar(45) DEFAULT NULL,
-  `참여인원` varchar(45) DEFAULT NULL,
-  PRIMARY KEY (`연번`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `참여인원` int DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,8 +35,62 @@ CREATE TABLE `chat_list` (
 
 LOCK TABLES `chat_list` WRITE;
 /*!40000 ALTER TABLE `chat_list` DISABLE KEYS */;
-INSERT INTO `chat_list` VALUES (1,'chat_room_1','dsadas','8'),(2,'chat_room_2','dsadas','3'),(3,'chat_room_3','dsadas','0'),(4,'chat_room_asdasd','asdasd','0'),(5,'chat_room_asdasdasd','asdsad','0');
+INSERT INTO `chat_list` VALUES ('chat_room_asdasd','adsdsa',0),('chat_room_123','asdasd',0),('chat_room_345','dasdsadsa',0),('chat_room_칼바람나락','김기태',0);
 /*!40000 ALTER TABLE `chat_list` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `chat_room_123`
+--
+
+DROP TABLE IF EXISTS `chat_room_123`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `chat_room_123` (
+  `날짜` varchar(45) DEFAULT NULL,
+  `시간` varchar(45) DEFAULT NULL,
+  `송신자` varchar(45) DEFAULT NULL,
+  `내용` varchar(100) DEFAULT NULL,
+  `채팅방` varchar(45) DEFAULT NULL,
+  `알림` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `chat_room_123`
+--
+
+LOCK TABLES `chat_room_123` WRITE;
+/*!40000 ALTER TABLE `chat_room_123` DISABLE KEYS */;
+INSERT INTO `chat_room_123` VALUES ('23-02-01','15:21','asdasd','님이 입장하셨습니다.','123','입장'),('23-02-01','15:21','asdasd','sadda','123',NULL),('23-02-01','15:21','asdasd','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:31','asddas','님이 입장하셨습니다.','123','입장'),('23-02-01','15:31','asddas','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:32','asdasd','님이 입장하셨습니다.','123','입장'),('23-02-01','15:32','asdasd','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:34','asdasddas','님이 입장하셨습니다.','123','입장'),('23-02-01','15:34','asdasddas','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:36','asdasdads','님이 입장하셨습니다.','123','입장'),('23-02-01','15:36','asdasdads','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:36','asdasdads','님이 입장하셨습니다.','123','입장'),('23-02-01','15:36','asdasdads','asdasdasd','123',NULL),('23-02-01','15:36','asdasdads','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:41','123213','님이 입장하셨습니다.','123','입장'),('23-02-01','15:41','123213','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:42','123213','님이 입장하셨습니다.','123','입장'),('23-02-01','15:42','123213','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:44','asdasd','님이 입장하셨습니다.','123','입장'),('23-02-01','15:44','asdasd','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','15:44','asdasd','님이 입장하셨습니다.','123','입장'),('23-02-01','15:44','asdasdasd','님이 입장하셨습니다.','123','입장'),('23-02-01','15:44','asdasdasd','님이 채팅방을 나가셨습니다.','123','퇴장'),('23-02-01','16:01','123','님이 입장하셨습니다.','123','입장'),('23-02-01','16:01','123','님이 채팅방을 나가셨습니다.','123','퇴장');
+/*!40000 ALTER TABLE `chat_room_123` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `chat_room_345`
+--
+
+DROP TABLE IF EXISTS `chat_room_345`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `chat_room_345` (
+  `날짜` varchar(45) DEFAULT NULL,
+  `시간` varchar(45) DEFAULT NULL,
+  `송신자` varchar(45) DEFAULT NULL,
+  `내용` varchar(100) DEFAULT NULL,
+  `채팅방` varchar(45) DEFAULT NULL,
+  `알림` varchar(45) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `chat_room_345`
+--
+
+LOCK TABLES `chat_room_345` WRITE;
+/*!40000 ALTER TABLE `chat_room_345` DISABLE KEYS */;
+INSERT INTO `chat_room_345` VALUES ('23-02-01','15:44','asdasdasd','님이 입장하셨습니다.','345','입장'),('23-02-01','15:44','asdasdasd','님이 채팅방을 나가셨습니다.','345','퇴장');
+/*!40000 ALTER TABLE `chat_room_345` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -52,8 +104,9 @@ CREATE TABLE `chat_room_asdasd` (
   `날짜` varchar(45) DEFAULT NULL,
   `시간` varchar(45) DEFAULT NULL,
   `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(45) DEFAULT NULL,
-  `내용` varchar(100) DEFAULT NULL
+  `내용` varchar(100) DEFAULT NULL,
+  `채팅방` varchar(45) DEFAULT NULL,
+  `알림` varchar(45) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -63,60 +116,34 @@ CREATE TABLE `chat_room_asdasd` (
 
 LOCK TABLES `chat_room_asdasd` WRITE;
 /*!40000 ALTER TABLE `chat_room_asdasd` DISABLE KEYS */;
+INSERT INTO `chat_room_asdasd` VALUES ('23-02-01','15:47','asdasd','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','15:47','asdasd','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','15:47','123213','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','15:47','123213','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','15:48','asdasd','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','15:48','asdasd','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','17:16','asdasd','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','17:16','asdasd','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','17:18','김기태','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','17:18','김기태','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','17:19','김기태','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','17:19','김기태','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','17:21','김기태','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','17:21','123123','님이 입장하셨습니다.','asdasd','입장'),('23-02-01','17:23','김기태','님이 채팅방을 나가셨습니다.','asdasd','퇴장'),('23-02-01','17:23','123123','님이 채팅방을 나가셨습니다.','asdasd','퇴장');
 /*!40000 ALTER TABLE `chat_room_asdasd` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
--- Table structure for table `chat_room_asdasdasd`
+-- Table structure for table `chat_room_칼바람나락`
 --
 
-DROP TABLE IF EXISTS `chat_room_asdasdasd`;
+DROP TABLE IF EXISTS `chat_room_칼바람나락`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `chat_room_asdasdasd` (
-  `날짜` varchar(45) DEFAULT NULL,
-  `시간` varchar(45) DEFAULT NULL,
-  `송신자` varchar(45) DEFAULT NULL,
-  `수신자` varchar(45) DEFAULT NULL,
-  `내용` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `chat_room_asdasdasd`
---
-
-LOCK TABLES `chat_room_asdasdasd` WRITE;
-/*!40000 ALTER TABLE `chat_room_asdasdasd` DISABLE KEYS */;
-/*!40000 ALTER TABLE `chat_room_asdasdasd` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
--- Table structure for table `net_chat`
---
-
-DROP TABLE IF EXISTS `net_chat`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `net_chat` (
+CREATE TABLE `chat_room_칼바람나락` (
   `날짜` varchar(45) DEFAULT NULL,
   `시간` varchar(45) DEFAULT NULL,
   `송신자` varchar(45) DEFAULT NULL,
   `내용` varchar(100) DEFAULT NULL,
   `채팅방` varchar(45) DEFAULT NULL,
-  `채팅방연번` int DEFAULT NULL,
   `알림` varchar(45) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `net_chat`
+-- Dumping data for table `chat_room_칼바람나락`
 --
 
-LOCK TABLES `net_chat` WRITE;
-/*!40000 ALTER TABLE `net_chat` DISABLE KEYS */;
-INSERT INTO `net_chat` VALUES ('23-01-31','17:03','dasdsa','123213','2',2,NULL),('23-01-31','17:03','123123.','123213','2',2,NULL),('23-01-31','17:03','dasdsa','님이 채팅방을 나가셨습니다.','2',2,'퇴장'),('23-01-31','17:03','123123.','님이 채팅방을 나가셨습니다.','2',2,'퇴장');
-/*!40000 ALTER TABLE `net_chat` ENABLE KEYS */;
+LOCK TABLES `chat_room_칼바람나락` WRITE;
+/*!40000 ALTER TABLE `chat_room_칼바람나락` DISABLE KEYS */;
+/*!40000 ALTER TABLE `chat_room_칼바람나락` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -137,7 +164,6 @@ CREATE TABLE `online_user` (
 
 LOCK TABLES `online_user` WRITE;
 /*!40000 ALTER TABLE `online_user` DISABLE KEYS */;
-INSERT INTO `online_user` VALUES ('sadasd');
 /*!40000 ALTER TABLE `online_user` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -150,4 +176,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2023-01-31 19:29:59
+-- Dump completed on 2023-02-01 20:12:23
