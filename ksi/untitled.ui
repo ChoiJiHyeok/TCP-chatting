@@ -209,6 +209,19 @@
       <string>채팅방 생성</string>
      </property>
     </widget>
+    <widget class="QLabel" name="lb_open_room">
+     <property name="geometry">
+      <rect>
+       <x>250</x>
+       <y>160</y>
+       <width>201</width>
+       <height>20</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+    </widget>
    </widget>
    <widget class="QWidget" name="page_3">
     <widget class="QPushButton" name="btn_send_message">
