@@ -95,6 +95,8 @@ class MultiChatServer:
                         a = cursor.fetchall()
                         used_chat_room_signal= False
                         for i in a:
+
+                            
                             if i[0] == chat_name:
                                 print('조건문')
                                 self.final_received_message = f"{user_name}\/!@|USED CHATING ROOM NAME|@!".encode()
