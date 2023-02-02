@@ -145,20 +145,33 @@ class MultiChatServer:
                         #필요한 값들 변수에 저장하기
                         message = msg.split('\/')[2]
                         chat_room_name = msg.split('\/')[3]
+                        if '/초대' in message:
+                            invite_send_index = self.clients_name.index(user_name) #초대한 사람 찾기
+                            invite_send_sock = self.clients[invite_send_index] # 초대한 사람 소켓 찾기
+                            invite_recv_name = message.split(' ')[1] #초대받은 사람 이름
+                            invite_recv_index = self.clients_name.index(invite_recv_name) #초대 받은 사람 찾기
+                            invite_recv_sock = self.clients[invite_recv_index] #초대 받은 사람 소켓 찾기
+                            self.invite_msg = f'{user_name}/!@#|INVITE SIGNAL|#!@/{invite_recv_name}/{chat_room_name}/{user_name}님이\n{chat_room_name}으로\n{invite_recv_name}님을 초대했습니다.'.encode()
+                            self.send_invite_client(invite_recv_sock)
+                            continue
                         #저장된 값으로 메시지DB 추가해주기
                         cursor.execute(f"insert into chat_room_{chat_room_name} (날짜,시간,송신자,내용,채팅방) values ('{date}','{time}','{user_name}','{message}','{chat_room_name}')")
                         conn.commit() #수정값 저장
                         #유저들에게 보낼 메시지 만들어서 인코딩하기
                         self.final_received_message = f"{time}   {user_name}: {message}\/!@#|SEND MESSAGE|#@!\/{chat_room_name}".encode()
+
                     print(self.final_received_message.decode())
                     self.send_all_clients(self.clients)
-                except ValueError as er: print(er) #오류 출력
+                except Exception as er: print(er) #오류 출력
         #소켓 닫기
         c_socket.close()
     def send_all_clients(self,clients):
         for client in clients: # 목록에 있는 모든 소켓에 대해 위에서 만든 메시지 보내기
             socket, (ip,port) = client
             socket.sendall(self.final_received_message)
+    def send_invite_client(self, r_socket):
+        socket, (ip, port) = r_socket
+        socket.sendall(self.invite_msg)
 
 
 

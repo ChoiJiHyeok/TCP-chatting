@@ -15,6 +15,7 @@ class ChatClient(QWidget, form_class):
         self.setupUi(self)
         self.move(100,100)
         # self.move(600, 100)
+        # self.move(1100, 100)
         self.stackedWidget.setCurrentIndex(0)
         self.sw_open_chat.setCurrentIndex(0)
         self.btn_send_message.clicked.connect(self.send_chat)
@@ -28,7 +29,13 @@ class ChatClient(QWidget, form_class):
         self.tw_chat_list.setColumnWidth(0, 141)
         self.tw_chat_list.setColumnWidth(1, 141)
         self.tw_chat_list.setColumnWidth(2, 141)
-        self.tw_chat_list.cellDoubleClicked.connect(self.go_chat)
+        self.listen_thr = listen_Qthread(self)
+        self.listen_thr.chat_roomname=None
+        self.listen_thr.invite_sigal=False
+        self.tw_chat_list.cellDoubleClicked.connect(lambda:self.go_chat(invite_signal=False, chat_roomname=None))
+        self.btn_invite_O.clicked.connect(lambda:self.go_chat(self.listen_thr.invite_sigal, self.listen_thr.chat_roomname))
+        self.btn_invite_X.clicked.connect(self.invite_msg_hide)
+        self.gb_invite_msg.hide()
 
     def send_chat(self): #메시지를 보냈을 때
         message = self.le_message.text() #메시지값 받기
@@ -47,24 +54,27 @@ class ChatClient(QWidget, form_class):
             self.lw_message.addItem(f"{i[0]}  {i[1]}: {i[2]}")
         #리스트 스크롤 아래로
         self.lw_message.scrollToBottom()
-    def go_chat(self): #채팅방 들어갔을 때
+    def go_chat(self, invite_signal,chat_roomname): #채팅방 들어갔을 때
+        print('초대 받음')
+        print('초대 bool ',invite_signal,' 채팅방이름=', chat_roomname)
         #메시지 리스트위젯 클리어
         self.lw_message.clear()
         #들어간 채팅방의 정보가져오기
         chat_room_info = self.tw_chat_list.selectedItems()
         #채팅방 이름 담기
-        self.chat_room_name = chat_room_info[0].text()
+        if invite_signal:
+            self.chat_room_name = chat_roomname
+        else: self.chat_room_name = chat_room_info[0].text()
         print(self.chat_room_name) #확인용 출력
         #들어간 채팅방의 이름으로 라벨 바꿔주기
         self.lb_chat_name.setText(str(self.chat_room_name))
-        #채팅방 참여인원 담기
-        chat_room_personnel = chat_room_info[2].text()
         #서버에 보낼 메시지 만들어서 인코딩
-        enter_chat_room_msg = (f"{self.login_user_id}\/!&%*|ENTER CHAT ROOM|*%&!\/{self.chat_room_name}\/{chat_room_personnel}").encode()
+        enter_chat_room_msg = (f"{self.login_user_id}\/!&%*|ENTER CHAT ROOM|*%&!\/{self.chat_room_name}").encode()
         #서버에 메시지 보내기
         self.client_socket.send(enter_chat_room_msg)
         self.stackedWidget.setCurrentIndex(2)
         self.lw_message.scrollToBottom()
+        self.invite_msg_hide()
 
     def go_input_name_page(self):#제일 처음 화면으로
         #쓰레드 멈추는 시그널
@@ -93,8 +103,8 @@ class ChatClient(QWidget, form_class):
             self.stackedWidget.setCurrentIndex(1)
             #쓰레드 실행하기
             self.Thread_exit = False
-            listen_thr = listen_Qthread(self)
-            listen_thr.start()
+            # self.listen_thr = listen_Qthread(self)
+            self.listen_thr.start()
             self.le_name.clear()
     def online_user_update(self,online_user_list): #유저가 온라인 했을 경우
         #온라인 유저목록 클리어
@@ -137,11 +147,14 @@ class ChatClient(QWidget, form_class):
         self.client_socket.connect((ip, port))
         connect_message= (f"{self.login_user_id}\/{self.login_user_id}님이 접속했습니다.").encode()
         self.client_socket.send(connect_message)
+    def invite_msg_hide(self):
+        self.gb_invite_msg.hide()
 
     def closeEvent(self, QCloseEvent): #유저가 강제종료했을 경우
         #채팅방에서는 종료를 못시키게함
         if self.stackedWidget.currentIndex() == 2:
             QCloseEvent.ignore() #이건 종료하지마라임
+            self.chat_exit()
             return
         #채팅방이 아닌 경우에서는 종료시켜야함
         self.Thread_exit = True
@@ -167,6 +180,7 @@ class listen_Qthread(QThread):
             if not buf: # 연결이 종료됨
                 break
             buf = buf.decode('utf-8')
+            print(buf)
             if '@!|USER UPDATE|!@' in buf: #유저목록 업데이트
                 temp = buf.split('\/')[1]
                 temp2= buf.split('\/')[2]
@@ -222,6 +236,17 @@ class listen_Qthread(QThread):
                 #업데이트된 채팅방 목록 테이블 위젯에 넣어주기
                 self.parent.chat_room_update(chat_list)
                 continue
+            elif '!@#|INVITE SIGNAL|#!@' in buf:
+                self.parent.gb_invite_msg.show()
+                self.invite_sigal= True
+                self.chat_roomname = buf.split('/')[3]
+                invite_msg = buf.split('/')[4]
+                self.parent.lb_invite_msg.setText(invite_msg)
+
+
+            #f'{user_name}/!@#|INVITE SIGNAL|#!@/{invite_recv_name}/{chat_room_name}/{user_name}님이 {chat_room_name}으로 {invite_recv_name}님을 초대했습니다.'.encode()
+            # go_chat(self, invite_signal, chat_roomname):  # 채팅방 들어갔을 때
+
         print('소켓해제')
         self.parent.client_socket.close()
 
