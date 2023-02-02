@@ -10,6 +10,7 @@ class MultiChatServer:
         self.clients=[] # 접속된 클라이언트 소켓 목록
         self.final_received_message="" #최종수신 메시지
         self.final_received_signal=""#최종수신 로그인 신호
+
         # self.final_received_userlist=[]#최종수신 userlist
         self.s_sock=socket(AF_INET, SOCK_STREAM)
         self.ip='10.10.21.105'
@@ -29,6 +30,14 @@ class MultiChatServer:
             cth=Thread(target=self.receive_messages, args=(c_socket,))
             cth.start()
 
+    # def send_chatroom(self, info_chatroom2,alert):
+    #     if info_chatroom2:
+    #         trans_room=json.dumps(info_chatroom2)+'ch##'
+    #         return trans_room
+    #     elif alert:
+    #         return alert
+
+
     #데이터를 수신하여 모든 클라이언트에게 전송한다
     def receive_messages(self, c_socket):
         while True:
@@ -42,57 +51,57 @@ class MultiChatServer:
                 self.final_received_message=incoming_message.decode('utf-8')
                 print(self.final_received_message)
                 self.send_all_clients(c_socket)
-                conn = p.connect(host='localhost', user='root', password='chlwlgur', db='population', charset='utf8')
+                conn = p.connect(host='localhost', user='root', password='chlwlgur', db='chatting', charset='utf8')
+                # conn = p.connect(host='localhost', user='root', password='chlwlgur', db='population', charset='utf8')
                 c = conn.cursor()
-                c.execute('SELECT *FROM new_table')
-                find_log=c.fetchall()
-                print(find_log)
-                if find_log == ():
-                    if '@@' not in self.final_received_message:
-                        # c.execute(f'UPDATE new_table SET aa = "{self.final_received_message}"');
-                        c.execute(f'INSERT INTO new_table (aa) VALUES ("{self.final_received_message}")');
-                        print('메시지 저장 1')
-                    else:
-                        print('메시지 확인 1')
+
+                # c.execute('SELECT *FROM new_table')
+                # find_log=c.fetchall()
+                # print(find_log)
+                c.execute('SELECT *FROM chatroom');
+                info_chatroom1=c.fetchall()
+                # print(info_chatroom1)
+                # for i in info_chatroom1:
+                #     if self.final_received_message in i:
+                #         alert='이미 존재 하는 방'
+                #         print('중복된 방이 존재 ')
+                #         pass
+                #         # return alert
+                #     else:
+                if '!!' in self.final_received_message :
+                    try :  #  db에 roooname(primary key) 값이 중복 되면 발생하는 에러 예외처리
+                        print(f'{self.final_received_message[2:]}')
+                        c.callproc('MAKE_ROOM',[f'{self.final_received_message[2:]}'])
+                        print('채팅방 추가')
+                    except:
                         pass
+                        return '$$'
                 else:
-                    if '@@' not in self.final_received_message:
-                              # c.execute(f'UPDATE POPULATION.NEW_TABLE SET aa = concat(aa, ",{self.final_received_message}"');
-                        c.execute(f'INSERT INTO new_table (aa) VALUES ("{self.final_received_message}")');
-                        print('message confirm')
-                    else:
-                        pass
-                        print('message 12')
+                    pass
+                # c.execute('SELECT *FROM chatroom');
+                # info_chatroom2=json.dumps(c.fetchall())+'ch##'
+                # print(info_chatroom2)
+                # if find_log == ():
+                #     if '@@' not in self.final_received_message: # 접속 명단 추가
+                #         # c.execute(f'UPDATE new_table SET aa = "{self.final_received_message}"');
+                #         c.execute(f'INSERT INTO new_table (aa) VALUES ("{self.final_received_message}")');
+                #         print('메시지 저장 1')
+                #     else:
+                #         print('메시지 확인 1')
+                #         pass
+                # else:
+                #     if '@@' not in self.final_received_message:
+                #               # c.execute(f'UPDATE POPULATION.NEW_TABLE SET aa = concat(aa, ",{self.final_received_message}"');
+                #         c.execute(f'INSERT INTO new_table (aa) VALUES ("{self.final_received_message}")');
+                #         print('message confirm')
+                #     else:
+                #         pass
+                #         print('message 12')
                 conn.commit()
                 conn.close()
+                # return info_chatroom2
 
         c_socket.close()
-
-    # def receive_signal(self, c_socket):
-    #     while True:
-    #         try:
-    #             incoming_signal=c_socket.recv(256)
-    #             if not incoming_signal:
-    #                 break
-    #         except:
-    #             continue
-    #         else:
-    #             self.final_received_signal=incoming_signal.decode('utf-8')
-    #             print(self.final_received_signal)
-    #             self.send_all_clients(c_socket)
-
-    # def received_userlist(self, c_socket):
-    #     while True:
-    #         try:
-    #             incoming_userlist=c_socket.recv(256)
-    #             if not incoming_userlist:
-    #                 break
-    #         except:
-    #             continue
-    #         else:
-    #             self.final_received_userlist=incoming_userlist.decode('utf-8')
-    #             print(self.final_received_userlist)
-    #             self.send_all_clients(c_socket)
 
     def send_all_clients(self, senders_socket):
         for client in self.clients:
@@ -100,8 +109,7 @@ class MultiChatServer:
             if socket is not senders_socket: # 송신자 제외한 클라이언트에게 보냄
                 try:
                     socket.sendall(self.final_received_message.encode())
-                    # socket.sendall(self.final_received_signal.encode())
-                    # socket.sendall(f'{self.final_received_userlist}'.encode())
+
                 except:
                     self.clients.remove(client)
                     print('{},{} 연결이 종료되었습니다.'.format(ip,port))
