@@ -60,14 +60,6 @@ class MultiChatServer:
                 # print(find_log)
                 c.execute('SELECT *FROM chatroom');
                 info_chatroom1=c.fetchall()
-                # print(info_chatroom1)
-                # for i in info_chatroom1:
-                #     if self.final_received_message in i:
-                #         alert='이미 존재 하는 방'
-                #         print('중복된 방이 존재 ')
-                #         pass
-                #         # return alert
-                #     else:
                 if '!!' in self.final_received_message :
                     try :  #  db에 roooname(primary key) 값이 중복 되면 발생하는 에러 예외처리
                         print(f'{self.final_received_message[2:]}')
@@ -75,12 +67,17 @@ class MultiChatServer:
                         print('채팅방 추가')
                     except:
                         pass
-                        return '$$'
                 else:
                     pass
-                # c.execute('SELECT *FROM chatroom');
-                # info_chatroom2=json.dumps(c.fetchall())+'ch##'
-                # print(info_chatroom2)
+                c.execute('SELECT *FROM chatroom');
+                # string='ch##'
+                # tuple=(string,)
+                info_chatroom2=str(c.fetchall())
+                send_chat_info=json.dumps('ch##'+info_chatroom2)
+
+                print(info_chatroom2,'gg')
+                print(self.final_received_message,'gigi')
+                c_socket.sendall(send_chat_info)
                 # if find_log == ():
                 #     if '@@' not in self.final_received_message: # 접속 명단 추가
                 #         # c.execute(f'UPDATE new_table SET aa = "{self.final_received_message}"');
@@ -103,16 +100,35 @@ class MultiChatServer:
 
         c_socket.close()
 
+    # def send_chatroom(self, info_chatroom2): #채팅방 db 모든 클라이언트에게
+    #     for client in self.clients:
+    #         socket, (ip, port) = client
+    #         try:
+    #             socket.sendall(info_chatroom2)
+    #         except:
+    #             self.clients.remove(client)
+    #             print('{},{} 연결이 종료되었습니다.'.format(ip, port))
+
     def send_all_clients(self, senders_socket):
         for client in self.clients:
             socket, (ip, port) = client
             if socket is not senders_socket: # 송신자 제외한 클라이언트에게 보냄
                 try:
                     socket.sendall(self.final_received_message.encode())
-
                 except:
                     self.clients.remove(client)
                     print('{},{} 연결이 종료되었습니다.'.format(ip,port))
 
 if __name__=="__main__":
     MultiChatServer()
+
+
+
+
+
+
+
+
+
+
+
