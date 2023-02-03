@@ -24,18 +24,35 @@ class ChatClient(QWidget, form_class):
         self.btn_finish.clicked.connect(self.go_main)
         self.btn_exit.clicked.connect(self.chat_exit)
         self.btn_chat_open.clicked.connect(self.chat_room_stack)
-        self.btn_room_fns.clicked.connect(self.add_chat_room)
+        self.btn_room_finish.clicked.connect(self.add_chat_room)
         self.btn_back_input.clicked.connect(self.go_input_name_page)
         self.tw_chat_list.setColumnWidth(0, 141)
         self.tw_chat_list.setColumnWidth(1, 141)
         self.tw_chat_list.setColumnWidth(2, 141)
         self.listen_thr = listen_Qthread(self)
-        self.listen_thr.chat_roomname=None
-        self.listen_thr.invite_sigal=False
+        self.listen_thr.chat_roomname = None
+        self.listen_thr.invite_sigal = False
         self.tw_chat_list.cellDoubleClicked.connect(lambda:self.go_chat(invite_signal=False, chat_roomname=None))
         self.btn_invite_O.clicked.connect(lambda:self.go_chat(self.listen_thr.invite_sigal, self.listen_thr.chat_roomname))
         self.btn_invite_X.clicked.connect(self.invite_msg_hide)
+        self.btn_chat_delete.clicked.connect(self.chat_delete)
         self.gb_invite_msg.hide()
+    def chat_delete(self):
+        try:
+            chat_room_info = self.tw_chat_list.selectedItems()
+            chat_room_name = chat_room_info[0].text()
+            chat_room_Founder = chat_room_info[1].text()
+            chat_perssonal = chat_room_info[2].text()
+            if chat_room_Founder == self.login_user_id and int(chat_perssonal) == 0:
+                delete_chat_room = f"{self.login_user_id}\/!@#|DELETE CHAT ROOM|#@!\/{chat_room_name}".encode()
+                self.client_socket.send(delete_chat_room)
+            elif chat_room_Founder != self.login_user_id:
+                QMessageBox.information(self, '개설자','개설자가 아닙니다.', QMessageBox.Ok)
+                return
+            elif int(chat_perssonal) !='0':
+                QMessageBox.information(self, '참여인원', '참여인원이 없는 채팅방만 삭제가능합니다.', QMessageBox.Ok)
+        except Exception as a : print(a)
+
 
     def send_chat(self): #메시지를 보냈을 때
         message = self.le_message.text() #메시지값 받기
@@ -55,7 +72,6 @@ class ChatClient(QWidget, form_class):
         #리스트 스크롤 아래로
         self.lw_message.scrollToBottom()
     def go_chat(self, invite_signal,chat_roomname): #채팅방 들어갔을 때
-        print('초대 받음')
         print('초대 bool ',invite_signal,' 채팅방이름=', chat_roomname)
         #메시지 리스트위젯 클리어
         self.lw_message.clear()
@@ -75,14 +91,6 @@ class ChatClient(QWidget, form_class):
         self.stackedWidget.setCurrentIndex(2)
         self.lw_message.scrollToBottom()
         self.invite_msg_hide()
-
-    def go_input_name_page(self):#제일 처음 화면으로
-        #쓰레드 멈추는 시그널
-        self.Thread_exit = True
-        #서버에 보낼 메시지 해당유저의 온라인상태를 오프라인으로 바꾸기 위해 만듬
-        exit_msg = (f"{self.login_user_id}\/!&%*|EXIT|*%&!").encode()
-        self.client_socket.send(exit_msg)
-        self.stackedWidget.setCurrentIndex(0)
 
     def go_main(self): #이름 입력 후 메인화면
         #유저 이름 받기
@@ -106,21 +114,28 @@ class ChatClient(QWidget, form_class):
             # self.listen_thr = listen_Qthread(self)
             self.listen_thr.start()
             self.le_name.clear()
+
+    def go_input_name_page(self):#제일 처음 화면으로
+        #쓰레드 멈추는 시그널
+        self.Thread_exit = True
+        #서버에 보낼 메시지 해당유저의 온라인상태를 오프라인으로 바꾸기 위해 만듬
+        exit_msg = (f"{self.login_user_id}\/!&%*|EXIT|*%&!").encode()
+        self.client_socket.send(exit_msg)
+        self.stackedWidget.setCurrentIndex(0)
     def online_user_update(self,online_user_list): #유저가 온라인 했을 경우
         #온라인 유저목록 클리어
         self.lw_online_user.clear()
         #받아온 온라인된 유저 리스트 위젯에 넣기
         for i in online_user_list:
-            self.lw_online_user.addItem(i[0])
+            self.lw_online_user.addItem(i)
             self.lw_online_user.scrollToBottom()
     def chat_room_stack(self): #채팅방으로 이동하기
         self.sw_open_chat.setCurrentIndex(1)
     def add_chat_room(self): #채팅방 개설
-        chat_name = self.le_chat_room.text()
-        self.le_chat_room.clear()
-        chat_num = '{:04d}'.format(random.randint(0, 9999))
+        chat_name = self.le_chat_room_.text()
+        self.le_chat_room_.clear()
         #채팅방 개설 메시지 만들어서 인코딩하기
-        open_chat_message = (f"{self.login_user_id}\/!@|CHATING ROOM OPEN|@!\/chat_room_{chat_name}\/{chat_num}").encode()
+        open_chat_message = (f"{self.login_user_id}\/!@|CHATING ROOM OPEN|@!\/chat_room_{chat_name}").encode()
         self.client_socket.send(open_chat_message)
 
     def chat_room_update(self,chat_list): #채팅방 업데이트
@@ -182,13 +197,31 @@ class listen_Qthread(QThread):
             buf = buf.decode('utf-8')
             print(buf)
             if '@!|USER UPDATE|!@' in buf: #유저목록 업데이트
+                self.parent.lw_online_user.clear()
                 temp = buf.split('\/')[1]
+                print('템프:',temp)
                 temp2= buf.split('\/')[2]
-                online_user_list= json.loads(temp)
+                print('템프2:',temp2)
                 chat_list = json.loads(temp2)
-                self.parent.online_user_update(online_user_list)
-                self.parent.chat_room_update(chat_list)
+                if temp == '온라인 유저 없음':
+                    print(temp)
+                    self.parent.lw_online_user.clear()
+                    self.parent.chat_room_update(chat_list)
+                else:
+                    print('템프: ',temp)
+                    online_user_list = json.loads(temp)
+                    print('템프: ',temp)
+                    self.parent.online_user_update(online_user_list)
+                    self.parent.chat_room_update(chat_list)
                 continue
+            elif '!&%*|UPDATE CHAT ROOM|*%&!' in buf:
+                buf_name = buf.split('\/')[0]
+                temp = buf.split('\/')[2]
+                del_chat_room_name = buf.split('\/')[3]
+                update_chat_list = json.loads(temp)
+                self.parent.chat_room_update(update_chat_list)
+                if self.parent.login_user_id == buf_name:
+                    self.parent.lb_open_room.setText(f'채팅방 {del_chat_room_name}을 삭제했습니다.')
             elif '!&%*|ENTER CHAT ROOM|*%&!' in buf: #유저가 채팅방을 들어갔을 경우
                 temp = buf.split('\/')[1]
                 temp2 = buf.split('\/')[3]
@@ -199,13 +232,13 @@ class listen_Qthread(QThread):
                 self.parent.chat_room_update(chat_list)
                 self.parent.lb_open_room.setText('')
                 continue
-            elif '!@|CHATING ROOM UPDATE|@!' in buf: #유저가 채팅방을 만들었을경우
+            elif '!@|CHATING ROOM UPDATE|@!' in buf: #유저가 채팅방을 만들었을 경우
                 a = buf.split('\/')[1]
                 chat_list= json.loads(a)
                 self.parent.chat_room_update(chat_list)
                 self.parent.lb_open_room.setText('')
                 continue
-            elif f"!@|USED CHATING ROOM NAME|@!" in buf:
+            elif f"!@|USED CHATING ROOM NAME|@!" in buf: #채팅방이름 중복됐을 경우
                 buf_name= buf.split('\/')[0]
                 print("self.parent.login_user_id",self.parent.login_user_id)
                 print("buf_name:",buf_name)
@@ -215,7 +248,7 @@ class listen_Qthread(QThread):
                 message = buf.split('\/')[0]
                 chat_room = buf.split('\/')[2]
                 #유저가 메시지를 보낸 채팅방과 들어가있는 채팅방이 같을 경우만 리스트위젯에 넣어주는건데 채팅방별로 테이블을 만들어서 나중에 이거없애야함
-                if str(chat_room) == str(self.parent.chat_room_name):
+                if chat_room == self.parent.chat_room_name:
                     self.parent.lw_message.addItem(message)
                 #업데이트 됐을 때 스크롤 내려주는거
                 self.parent.lw_message.scrollToBottom()
@@ -236,17 +269,12 @@ class listen_Qthread(QThread):
                 #업데이트된 채팅방 목록 테이블 위젯에 넣어주기
                 self.parent.chat_room_update(chat_list)
                 continue
-            elif '!@#|INVITE SIGNAL|#!@' in buf:
+            elif '!@#|INVITE SIGNAL|#!@' in buf: #초대를 받았을 경우
                 self.parent.gb_invite_msg.show()
                 self.invite_sigal= True
                 self.chat_roomname = buf.split('/')[3]
                 invite_msg = buf.split('/')[4]
                 self.parent.lb_invite_msg.setText(invite_msg)
-
-
-            #f'{user_name}/!@#|INVITE SIGNAL|#!@/{invite_recv_name}/{chat_room_name}/{user_name}님이 {chat_room_name}으로 {invite_recv_name}님을 초대했습니다.'.encode()
-            # go_chat(self, invite_signal, chat_roomname):  # 채팅방 들어갔을 때
-
         print('소켓해제')
         self.parent.client_socket.close()
 
